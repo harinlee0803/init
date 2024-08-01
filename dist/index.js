@@ -5954,6 +5954,8 @@ const run = (wsdir, args) => __awaiter(void 0, void 0, void 0, function* () {
     }
     // check if installation is needed
     const shouldInstall = !installedBitVersion || (bitEngineVersion && bitEngineVersion !== installedBitVersion);
+    yield (0, exec_1.exec)('echo', [`shouldInstall is ${shouldInstall}`]);
+    yield (0, exec_1.exec)('echo', [`installedBitVersion is ${installedBitVersion}`]);
     if (shouldInstall) {
         if (installedBitVersion && bitEngineVersion && bitEngineVersion !== installedBitVersion) {
             core.warning(`WARNING - Bit version ${installedBitVersion} is already installed, however workspace requires the version ${bitEngineVersion}. Installing version ${bitEngineVersion}. This may increase the overall build time.`);

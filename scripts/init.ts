@@ -41,6 +41,9 @@ const run = async (wsdir: string, args: string[]) => {
   // check if installation is needed
   const shouldInstall = !installedBitVersion || (bitEngineVersion && bitEngineVersion !== installedBitVersion);
 
+  await exec('echo', [`shouldInstall is ${shouldInstall}`]);
+  await exec('echo', [`installedBitVersion is ${installedBitVersion}`]);
+
   if (shouldInstall) {
     if (installedBitVersion && bitEngineVersion && bitEngineVersion !== installedBitVersion) {
       core.warning(`WARNING - Bit version ${installedBitVersion} is already installed, however workspace requires the version ${bitEngineVersion}. Installing version ${bitEngineVersion}. This may increase the overall build time.`);
