@@ -5943,6 +5943,9 @@ const run = (wsdir, args) => __awaiter(void 0, void 0, void 0, function* () {
             listeners: {
                 stdout: (data) => {
                     installedBitVersion += data.toString();
+                },
+                stderr: (data) => {
+                    core.error(`Error: ${data.toString()}`);
                 }
             }
         });
@@ -5950,12 +5953,13 @@ const run = (wsdir, args) => __awaiter(void 0, void 0, void 0, function* () {
         core.info(`Bit version ${installedBitVersion} is available on the build agent.`);
     }
     catch (error) {
+        core.error(`Failed to get installed bit version: ${error}`);
         installedBitVersion = "";
     }
     // check if installation is needed
     const shouldInstall = !installedBitVersion || (bitEngineVersion && bitEngineVersion !== installedBitVersion);
-    yield (0, exec_1.exec)('echo', [`shouldInstall is ${shouldInstall}`]);
-    yield (0, exec_1.exec)('echo', [`installedBitVersion is ${installedBitVersion}`]);
+    core.info(`shouldInstall is ${shouldInstall}`);
+    core.info(`installedBitVersion is ${installedBitVersion}`);
     if (shouldInstall) {
         if (installedBitVersion && bitEngineVersion && bitEngineVersion !== installedBitVersion) {
             core.warning(`WARNING - Bit version ${installedBitVersion} is already installed, however workspace requires the version ${bitEngineVersion}. Installing version ${bitEngineVersion}. This may increase the overall build time.`);
