@@ -25,25 +25,29 @@ const run = async (wsdir: string, args: string[]) => {
   // get installed bit version
   let installedBitVersion = "";
   try {
+
     await exec('bit', ['-v'], {
       listeners: {
         stdout: (data: Buffer) => {
           installedBitVersion += data.toString();
+        },
+        stderr: (data: Buffer) => {
+          core.error(`Error: ${data.toString()}`);
         }
       }
     });
     installedBitVersion = installedBitVersion.trim();
     core.info(`Bit version ${installedBitVersion} is available on the build agent.`);
   } catch (error) {
-    core.info(error.message);
+    core.error(`Failed to get installed bit version: ${error}`);
     installedBitVersion = "";
   }
 
   // check if installation is needed
   const shouldInstall = !installedBitVersion || (bitEngineVersion && bitEngineVersion !== installedBitVersion);
 
-  await exec('echo', [`shouldInstall is ${shouldInstall}`]);
-  await exec('echo', [`installedBitVersion is ${installedBitVersion}`]);
+  core.info(`shouldInstall is ${shouldInstall}`);
+  core.info(`installedBitVersion is ${installedBitVersion}`);
 
   if (shouldInstall) {
     if (installedBitVersion && bitEngineVersion && bitEngineVersion !== installedBitVersion) {
