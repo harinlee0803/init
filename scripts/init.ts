@@ -35,6 +35,7 @@ const run = async (wsdir: string, args: string[]) => {
     installedBitVersion = installedBitVersion.trim();
     core.info(`Bit version ${installedBitVersion} is available on the build agent.`);
   } catch (error) {
+    core.info(error.message);
     installedBitVersion = "";
   }
 
